@@ -2,4 +2,4 @@
 analytics = false
 remote = myremote
 ['remote "myremote"']
-url = /dvc
+url = s3://axel-brv-plnt-seed/plant_seeding
