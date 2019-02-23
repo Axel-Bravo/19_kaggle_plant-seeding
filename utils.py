@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 
 class_names = 'train_dataset'.classes
 
+
 def imshow(inp, title=None):
     """Imshow for Tensor."""
     inp = inp.numpy().transpose((1, 2, 0))
