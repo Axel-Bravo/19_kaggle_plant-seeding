@@ -1,2 +1,3 @@
 [core]
 analytics = false
+remote = plant_seed
