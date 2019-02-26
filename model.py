@@ -55,7 +55,7 @@ def validation(model: nn.Module, val_loader: torch.utils.data.DataLoader, criter
     val_loss = 0
     val_accuracy = 0
     for images, labels in val_loader:
-        images.resize_(images.shape[0], 784)
+        images, labels = images.to(device), labels.to(device)
 
         output = model.forward(images)
         val_loss += criterion(output, labels).item()
