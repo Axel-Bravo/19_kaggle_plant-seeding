@@ -42,13 +42,14 @@ class CNNModel(nn.Module):
         return num_features
 
 
-def validation(model: nn.Module, val_loader: torch.utils.data.DataLoader, criterion: nn.CrossEntropyLoss) -> \
-        (float, float):
+def validation(model: nn.Module, val_loader: torch.utils.data.DataLoader, criterion: nn.CrossEntropyLoss, device: str)\
+        -> (float, float):
     """
     Validation step during training
     :param model: NN model being trained
     :param val_loader: validation dataset loader
-    :param criterion: loss criterion emloyed
+    :param criterion: loss criterion employed
+    :param device: device where we execute the model; cuda/cpu
     :return: validation loss and validation accuracy
     """
     val_loss = 0
