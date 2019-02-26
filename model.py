@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -39,3 +40,27 @@ class CNNModel(nn.Module):
         for s in size:
             num_features *= s
         return num_features
+
+
+def validation(model: nn.Module, val_loader: torch.utils.data.DataLoader, criterion: nn.CrossEntropyLoss) -> \
+        (float, float):
+    """
+    Validation step during training
+    :param model: NN model being trained
+    :param val_loader: validation dataset loader
+    :param criterion: loss criterion emloyed
+    :return: validation loss and validation accuracy
+    """
+    val_loss = 0
+    val_accuracy = 0
+    for images, labels in val_loader:
+        images.resize_(images.shape[0], 784)
+
+        output = model.forward(images)
+        val_loss += criterion(output, labels).item()
+
+        ps = torch.exp(output)
+        equality = (labels.data == ps.max(dim=1)[1])
+        val_accuracy += equality.type(torch.FloatTensor).mean()
+
+    return val_loss, val_accuracy
