@@ -1,0 +1,6 @@
+md5: f5c498cb195f7f34bb36b6f4cd3e7290
+outs:
+- cache: true
+  md5: e793dfca72cac9bc256e982d9d58df41.dir
+  metric: false
+  path: model
