@@ -1,10 +1,13 @@
 #%% 0| Import and function declaration
-from data_process import PlantDataset
-from model import CNNModel, validation
-
 import torch
+import torch.optim as optim
+from torch.optim import lr_scheduler
 from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
+
+from data_process import PlantDataset
+from model import CNNModel
+from train_module import train_model
 
 # Parameters
 batch_size = 64
@@ -28,10 +31,14 @@ train_dataset = datasets.ImageFolder('data/train_split', train_transforms)
 val_dataset = datasets.ImageFolder('data/val_split', val_test_transforms)
 test_dataset = PlantDataset('data/test', val_test_transforms)
 
+dataset_sizes = {'train': len(train_dataset), 'val': len(val_dataset)}
+
 # Data Loader
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=12)
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True, num_workers=12)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=12)
+
+train_data_loader = {'train': train_loader, 'val': val_loader}
 
 
 #%% 2| Model - Preparation
@@ -41,32 +48,16 @@ model = CNNModel()
 model = model.to(device)
 
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
-#%%% 3 Model - Training
+optimizer_ft = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)  # Observe that all parameters are being optimized
+lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1) # Decay LR by a factor of 0.1 every 7 epochs
 
-for epoch in range(num_epochs):
-    model.train()
-    for i, (images, labels) in enumerate(train_loader):
 
-        images, labels = images.to(device), labels.to(device)
+#%% 3| Model - Training
 
-        optimizer.zero_grad()  # Clear gradients w.r.t. parameters
-        outputs = model(images)  # Forward pass to get output
-        loss = criterion(outputs, labels)  # Calculate Loss: softmax --> cross entropy loss
-        loss.backward()  # Getting gradients w.r.t. parameters
-        optimizer.step()  # Updating parameters
+model_trained = train_model(device=device, data_loaders= train_data_loader, dataset_sizes=dataset_sizes, model=model,
+                            criterion=criterion, optimizer=optimizer_ft, scheduler=lr_scheduler, num_epochs=50)
 
-    # Evaluation of trainning
-    model.eval()  # Make sure network is in eval mode for inference
 
-    with torch.no_grad():  # Turn off gradients for validation, saves memory and computations
-        test_loss, accuracy = validation(model, val_loader, criterion, device)
-
-    print("Epoch: {}/{}.. ".format(epoch + 1, num_epochs),
-          "Training Loss: {:.3f}.. ".format(loss),
-          "Val Loss: {:.3f}.. ".format(test_loss / len(test_loader)),
-          "Val Accuracy: {:.3f}".format(accuracy / len(test_loader)))
-
-    model.train()  # Make sure training is back on
-
+#%% 4| model -Save
+torch.save(model_trained.state_dict(), 'model/trained.pth')
