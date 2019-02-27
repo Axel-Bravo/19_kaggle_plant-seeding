@@ -10,8 +10,8 @@ from model import CNNModel
 from train_module import train_model
 
 # Parameters
-batch_size = 64
-num_epochs = 30
+batch_size = 128
+num_epochs = 50
 learning_rate = 0.001
 
 
@@ -56,7 +56,7 @@ lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1) # Decay
 #%% 3| Model - Training
 
 model_trained = train_model(device=device, data_loaders= train_data_loader, dataset_sizes=dataset_sizes, model=model,
-                            criterion=criterion, optimizer=optimizer_ft, scheduler=lr_scheduler, num_epochs=50)
+                            criterion=criterion, optimizer=optimizer_ft, scheduler=lr_scheduler, num_epochs=num_epochs)
 
 
 #%% 4| model -Save
