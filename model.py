@@ -8,23 +8,21 @@ class CNNModel(nn.Module):
         super(CNNModel, self).__init__()
 
         # CNN - Bock 1
-        self.conv_1_1 = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=4, stride=2, padding=1)
-        self.conv_1_2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=4, stride=2, padding=1)
-        self.maxpool_1 = nn.MaxPool2d(kernel_size=3)
+        self.conv_1 = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=2, padding=1)
+        self.conv_2 = nn.Conv2d(in_channels=16, out_channels=64, kernel_size=3, stride=2, padding=1)
+        self.conv_3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=2, padding=1)
 
-        # CNN - Block 2
-        self.conv_2_1 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=4, stride=2, padding=1)
-        self.conv_2_2 = nn.Conv2d(in_channels=32, out_channels=16, kernel_size=4, stride=2, padding=0)
-        self.maxpool_2 = nn.MaxPool2d(kernel_size=3)
+        self.maxpool_1 = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
         # MLP
-        self.fc1 = nn.Linear(16, 256)
-        self.fc2 = nn.Linear(256, 64)
-        self.fc3 = nn.Linear(64, 12)
+        self.fc1 = nn.Linear(128, 64)
+        self.fc2 = nn.Linear(64, 32)
+        self.fc3 = nn.Linear(32, 12)
 
     def forward(self, x):
-        x = F.relu(self.maxpool_1(self.conv_1_2(self.conv_1_1(x))))
-        x = F.relu(self.maxpool_1(self.conv_2_2(self.conv_2_1(x))))
+        x = F.relu(self.maxpool_1(self.conv_1(x)))
+        x = F.relu(self.maxpool_1(self.conv_2(x)))
+        x = F.relu(self.maxpool_1(self.conv_3(x)))
 
         x = x.view(-1, self.num_flat_features(x))
         x = F.relu(self.fc1(x))

@@ -11,18 +11,18 @@ from train_module import train_model
 
 # Parameters
 batch_size = 128
-num_epochs = 50
-learning_rate = 0.001
+num_epochs = 75
+learning_rate = 0.015
 
 
 #%% 1| Load dataset
 # Transformers
-train_transforms = transforms.Compose([transforms.RandomResizedCrop(135),
-                                       transforms.RandomHorizontalFlip(),
+train_transforms = transforms.Compose([transforms.RandomResizedCrop(50),
                                        transforms.ToTensor(),
                                        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 
-val_test_transforms = transforms.Compose([transforms.Resize((135, 135)),
+val_test_transforms = transforms.Compose([transforms.Resize(56),
+                                          transforms.CenterCrop(50),
                                           transforms.ToTensor(),
                                           transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 
@@ -49,13 +49,13 @@ model = model.to(device)
 
 criterion = torch.nn.CrossEntropyLoss()
 
-optimizer_ft = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)  # Observe that all parameters are being optimized
-lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1) # Decay LR by a factor of 0.1 every 7 epochs
+optimizer_ft = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)  # Observe that all parameters are being optimized
+lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=20, gamma=0.1)  # Decay LR by a factor of 0.1 every 7 epochs
 
 
 #%% 3| Model - Training
 
-model_trained = train_model(device=device, data_loaders= train_data_loader, dataset_sizes=dataset_sizes, model=model,
+model_trained = train_model(device=device, data_loaders=train_data_loader, dataset_sizes=dataset_sizes, model=model,
                             criterion=criterion, optimizer=optimizer_ft, scheduler=lr_scheduler, num_epochs=num_epochs)
 
 
