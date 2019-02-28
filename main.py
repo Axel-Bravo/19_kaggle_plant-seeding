@@ -3,16 +3,16 @@ import torch
 import torch.optim as optim
 from torch.optim import lr_scheduler
 from torchvision import transforms, datasets
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, RandomSampler
 
 from data_process import PlantDataset
 from model import CNNModel
 from train_module import train_model
 
 # Parameters
-batch_size = 128
-num_epochs = 75
-learning_rate = 0.015
+batch_size = 64
+num_epochs = 100
+learning_rate = 0.025
 
 
 #%% 1| Load dataset
@@ -32,9 +32,10 @@ val_dataset = datasets.ImageFolder('data/val_split', val_test_transforms)
 test_dataset = PlantDataset('data/test', val_test_transforms)
 
 dataset_sizes = {'train': len(train_dataset), 'val': len(val_dataset)}
+train_dataset_augmenter = 2
 
 # Data Loader
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=12)
+train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=True, num_workers=12)
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True, num_workers=12)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=12)
 
