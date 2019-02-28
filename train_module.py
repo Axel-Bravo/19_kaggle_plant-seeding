@@ -3,7 +3,21 @@ import copy
 import torch
 
 
-def train_model(device, data_loaders, dataset_sizes, model, criterion, optimizer, scheduler, num_epochs):
+def train_model(device: torch.device, data_loaders: dict, dataset_sizes: dict,
+                model: torch.nn.Module, criterion, optimizer, scheduler, num_epochs) -> torch.nn.Module:
+    """
+    Trains a model informing about the accuracies and loss for train/val sets at each epoch
+    :param device: device where to run the model, either: "gpu" or "cpu"
+    :param data_loaders: {"train"/"val": torch.utils.data.DataLoader} Data loaders for train and validation data
+    :param dataset_sizes: {"train"/"val": int} Size of the datasets
+    :param model: neural network architecture
+    :param criterion: loss error criterion calculation method
+    :param optimizer: network parameters optimizer
+    :param scheduler: learning rate adaptive scheduler value variation
+    :param num_epochs: number of epochs to train the model
+    :return: best trained models weights
+    """
+
     since = time.time()
 
     best_model_wts = copy.deepcopy(model.state_dict())
