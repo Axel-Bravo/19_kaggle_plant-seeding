@@ -11,22 +11,14 @@ We're hosting this dataset as a Kaggle competition in order to give it wider exp
 ## Data
 You are provided with a training set and a test set of images of plant seedlings at various stages of grown. Each image has a filename that is its unique id. The dataset comprises 12 plant species. The goal of the competition is to create a classifier capable of determining a plant's species from a photo. The list of species is as follows:
 
-`Black-grass
-Charlock
-Cleavers
-Common Chickweed
-Common wheat
-Fat Hen
-Loose Silky-bent
-Maize
-Scentless Mayweed
-Shepherds Purse
-Small-flowered Cranesbill
-Sugar beet`
+`Black-grass | Charlock | Cleavers | Common Chickweed | Common wheat | Fat Hen
+Loose Silky-bent | Maize | Scentless Mayweed | Shepherds Purse | Small-flowered Cranesbill | Sugar beet`
 
 ### File description
 __train.csv__ - the training set, with plant species organized by folder
+
 __test.csv__ - the test set, you need to predict the species of each image
+
 __sample_submission.csv__ - a sample submission file in the correct format
 
 ## Code
