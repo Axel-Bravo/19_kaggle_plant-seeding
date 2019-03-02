@@ -6,7 +6,7 @@ from torchvision import transforms, datasets
 from torch.utils.data import DataLoader, RandomSampler
 
 from data_process import PlantDataset
-from model import CNNModel
+from model import SimpleNet
 from train_module import train_model
 
 # Parameters
@@ -45,7 +45,7 @@ train_data_loader = {'train': train_loader, 'val': val_loader}
 #%% 2| Model - Preparation
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-model = CNNModel()
+model = SimpleNet()
 model = model.to(device)
 
 criterion = torch.nn.CrossEntropyLoss()
