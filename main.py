@@ -3,7 +3,7 @@ import torch
 import torch.optim as optim
 from torch.optim import lr_scheduler
 from torchvision import transforms, datasets
-from torch.utils.data import DataLoader, RandomSampler
+from torch.utils.data import DataLoader
 
 from data_process import PlantDataset
 from model import SimpleNet
@@ -18,6 +18,8 @@ learning_rate = 0.025
 #%% 1| Load dataset
 # Transformers
 train_transforms = transforms.Compose([transforms.RandomResizedCrop(50),
+                                       transforms.RandomHorizontalFlip(),
+                                       transforms.RandomRotation(25),
                                        transforms.ToTensor(),
                                        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 
